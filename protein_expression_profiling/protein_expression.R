@@ -1,26 +1,39 @@
 rm(list=ls())
-#rm(list=ls()[grep("dir_paths?[0-9]?", ls())])
-color_list <- c("orange", "lawngreen", "blue", "indianred1", "black", "purple", "royalblue", "olive", "cyan", "darkturquoise", "aquamarine4", "darkgreen", "navajowhite4", "cornflowerblue", "magenta", "violet", "sienna", "red", "darkorange", "slategray", "mediumslateblue", "lightseagreen", "deeppink", "rosybrown", "darkgoldenrod", "dodgerblue", "olivedrab", "darkviolet", "forestgreen", "deepskyblue")
-colors <- color_list
-cell_diameter <- 35
-staining <- "PROM-1_HA"
-control_genotype <- staining
+
+library(statsFunctions)
+cell_diameter <- 35     # only these many cds will be plotted
+staining <- "PROM-1_HA" # this should be present in the name of all the genotype 
+control_genotype <- staining  # positive control, can be different than staining in rare cases
 #control_genotype <- paste0(staining, "_LAG-1_HA")
-#plot_genotype <- c("N2", staining, paste0(staining, "_bn18"))
+
+# will only plot genotype mentioned in this list
 plot_genotype <- NULL
+#plot_genotype <- c("N2", staining, paste0(staining, "_bn18"))
 #plot_genotype <- c("N2", "gld-2_gld-1_LAG-1_HA", "gld-2_gld-1_glp-1_LAG-1_HA", "gld-2_gld-1_lst-1_sygl-1_LAG-1_HA") #, "gld-1_LAG-1_HA", "gld-2_LAG-1_HA")  ## can specify the genotype to plot
-include_row_data <- T
-show_significance <- T
-show_error_bar <- T
-show_label <- F
-plot_points <- T
-normalize <- T
-background_substraction <- F
-pool_replicate <- T
+include_row_data <- T  # progenitor zone length will be added to the graph, if you need something different, you would need to do it by your self
+show_significance <- T # cd-wise statistical comparison
+show_error_bar <- T  
+show_label <- F # average values for each cd will be plotted 
+plot_points <- F 
+normalize <- T  # if not true, raw data will be plotted
+background_substraction <- F # background will be subtracted based on genotype/s not having staining name in their genotype.
+pool_replicate <- T # Valid only when more one replicate are present.
 
+# choose the directory of experiment or replicate, you can add more directories by add dir_path2, dir_path3... etc
 dir_path1 <- "~/Dropbox/Acad/computational_work/R/protein_expression_analysis/PROM-1_HA_analysis/09.12.2020_TEMP/01.07.2020_bn18_PROM-1_HA_WAPL_nop1/"
-#dir_path1 <- "/run/media/areeba/passport/image_analysis/PROM-1_HA/2020/done_vincent/01.21.2020_oz231_PROM-1_HA_WAPL_nop1/"
 
+#dir_path2 <- "/run/media/areeba/passport/image_analysis/PROM-1_HA/2020/done_vincent/01.21.2020_oz231_PROM-1_HA_WAPL_nop1/"
+# color list
+
+color_list <- c("orange", "lawngreen", "blue", "indianred1", "black", "purple", "royalblue", "olive", "cyan", "darkturquoise", "aquamarine4", "darkgreen", "navajowhite4", "cornflowerblue", "magenta", "violet", "sienna", "red", "darkorange", "slategray", "mediumslateblue", "lightseagreen", "deeppink", "rosybrown", "darkgoldenrod", "dodgerblue", "olivedrab", "darkviolet", "forestgreen", "deepskyblue")
+
+# colors will be used for plotting, make changes or create new list
+colors <- color_list
+
+
+# PROGRAM STARTS HERE
+# DO NOT CHANGE ANYTHING BELOW
+##############################################################################
 options(dplyr.summarise.inform=F)  # reduces some of the summary outputs by dplyr
 
 if (normalize == FALSE) {
@@ -79,24 +92,6 @@ for (i in 1:length(replicate_dirs)){
     }
   }
 }
-
-# writeData <- function() {
-#   all_replicate_data <- normalizeValues(all_replicate_data, control_genotype)
-#   all_replicate_data %>%
-# #    dplyr::filter(staining == all_stainings[1]) %>% 
-#     group_by(genotype) %>%
-# #    group_by(staining, add = TRUE) %>%
-#     group_by(cd, add = TRUE) %>%
-#     summarise(
-#       value = round(mean(value), 0),
-#       rel_value = round(mean(rel_value), 0),
-#       absolute_value = round(mean(absolute_value), 0)
-#     ) -> mean_gen_cd
-#   
-#   write.csv(x = mean_gen_cd, file = paste0(dir_path, "cd_values.csv"))
-# }
-# 
-# writeData()
 
 detachPackages(loadedPackages)
 rm(list=ls())
